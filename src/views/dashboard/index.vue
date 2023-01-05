@@ -1,16 +1,19 @@
 <template>
   <div class="dashboard-container">
-    <Card/>
+    <Card></Card>
+    <LineChart></LineChart>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
 import Card from './card/index.vue'
+import LineChart from './lineChart/index.vue'
 export default {
   name: 'Dashboard',
   components:{
-    Card
+    Card,
+    LineChart
   },
   computed: {
     ...mapGetters([

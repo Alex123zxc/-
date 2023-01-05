@@ -41,7 +41,7 @@ export default {
   border-radius: 5px;
 }
 .tem-card:hover {
-  box-shadow: 6px 6px 10px rgba(179, 177, 177, 0.45);
+  box-shadow: 0 0 15px rgba(161, 156, 156, 0.45);
 }
 /* 包裹图标盒子的样式 */
 .tem-card .cardsSvg {
