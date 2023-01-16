@@ -2,6 +2,8 @@
   <div class="dashboard-container">
     <Card></Card>
     <LineChart></LineChart>
+    <Atlas></Atlas>
+    <TextContent></TextContent>
   </div>
 </template>
 
@@ -9,11 +11,15 @@
 import { mapGetters } from 'vuex'
 import Card from './card/index.vue'
 import LineChart from './lineChart/index.vue'
+import Atlas from './atlas/index.vue'
+import TextContent from './text/index.vue'
 export default {
   name: 'Dashboard',
   components:{
     Card,
-    LineChart
+    LineChart,
+    Atlas,
+    TextContent
   },
   computed: {
     ...mapGetters([
