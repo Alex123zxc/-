@@ -1,6 +1,6 @@
 <template>
   <div class="tuji">
-    <el-row type="flex" justify="space-between">
+    <el-row>
       <el-col :span="8"><Radar/></el-col>
       <el-col :span="8"><Pie/></el-col>
       <el-col :span="8"><Lines/></el-col>
