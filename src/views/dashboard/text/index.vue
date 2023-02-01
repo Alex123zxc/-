@@ -2,26 +2,26 @@
     <div class="contents">
       <el-row :gutter="20">
         <el-col :span="12"><div class="content1"><Status></Status></div></el-col>
-        <el-col :span="12"><div class="content1"><Feedback></Feedback></div> </el-col>
+        <el-col :span="12"><div class="content1"><todo-list /></div> </el-col>
       </el-row>   
     </div>
 </template>
 
 <script>
 import Status from './status/index.vue'
-import Feedback from './feedback/index.vue'
+import TodoList from './TodoList/index.vue'
 export default {
   name: 'TextContent',
   components:{
     Status,
-    Feedback
+    TodoList
   }
 };
 </script>
 
 <style scoped>
 .contents {
-  margin-top: 20px;
+  margin-top: 40px;
   box-sizing: border-box;
   background-color: #eeeff2;
   border-radius: 5px;

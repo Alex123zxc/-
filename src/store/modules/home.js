@@ -1,6 +1,6 @@
 import mockRequest from '@/utils/mockRequest'
 const state = {
-    list:{}
+    list:[]
 };
 
 const mutations = {
