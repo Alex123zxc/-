@@ -4,27 +4,22 @@
       岗位编码<el-input
         class="staffItem"
         size="small"
-        v-model="input"
+        v-model="newData.code"
         placeholder="请输入岗位编码"
       ></el-input>
       岗位名称<el-input
         class="staffItem"
         size="small"
-        v-model="input"
-        placeholder="请输入岗位名称"
+        v-model="newData.name"
+        placeholder="请输入员工姓名"
       ></el-input>
       岗位薪水<el-input
         class="staffItem"
         size="small"
-        v-model="input"
+        v-model="newData.salary"
         placeholder="请输入岗位薪水"
       ></el-input>
-      状态<el-select
-        size="small"
-        class="staffItem"
-        v-model="value"
-        placeholder="请选择"
-      >
+      状态<el-select size="small" class="staffItem" placeholder="请选择" v-model="options.label">
         <el-option
           v-for="item in options"
           :key="item.value"
@@ -33,42 +28,56 @@
         >
         </el-option>
       </el-select>
-      <el-button @click="getPlus()" type="primary" size="small" icon="el-icon-plus"
+      <el-button
+        @click="getPlus()"
+        type="primary"
+        size="small"
+        icon="el-icon-plus"
         >新增</el-button
       >
     </div>
     <el-table :data="tableData" stripe style="width: 100%">
-      <el-table-column label="岗位编号"  align="center" type="index">
+      <el-table-column label="岗位编号" align="center" type="index">
       </el-table-column>
       <el-table-column prop="code" label="岗位编码" width="180" align="center">
       </el-table-column>
-      <el-table-column prop="name" label="岗位名称" align="center">
+      <el-table-column prop="name" label="员工姓名" align="center">
       </el-table-column>
       <el-table-column prop="salary" label="薪水" align="center">
       </el-table-column>
       <el-table-column prop="status" label="状态" align="center" type="inde">
         <template slot-scope="scope">
-        <el-tag
-          :type="scope.row.status === '在岗' ? 'success' : 'warning'"
-          disable-transitions>{{scope.row.status}}</el-tag>
-      </template>
+          <el-tag
+            :type="scope.row.status === '在岗' ? 'success' : 'warning'"
+            disable-transitions
+            >{{ scope.row.status }}</el-tag
+          >
+        </template>
       </el-table-column>
-      <el-table-column prop="createTime" label="创建时间" align="center" width="180">
+      <el-table-column
+        prop="createTime"
+        label="创建时间"
+        align="center"
+        width="180"
+      >
       </el-table-column>
-      <el-table-column label="操作" align="center"> 
+      <el-table-column label="操作" align="center">
         <template slot-scope="scope">
-        <el-button
-          size="mini"
-          class="butcolor"
-          @click="getModify()">修改</el-button>
-        <el-button
-          size="mini"
-          type="danger"
-          @click="getDelete()">删除</el-button>
-      </template>
+          <el-button size="mini" class="butcolor" @click="getModify(scope.$index)"
+            >修改</el-button
+          >
+          <el-button size="mini" type="danger" @click="getDelete(scope.$index)"
+            >删除</el-button
+          >
+        </template>
       </el-table-column>
     </el-table>
-    <el-pagination class="paging" background layout="prev, pager, next" :total="100">
+    <el-pagination
+      class="paging"
+      background
+      layout="prev, pager, next"
+      :total="100"
+    >
     </el-pagination>
   </div>
 </template>
@@ -143,8 +152,15 @@ export default {
           name: "张桐绘",
           createTime: "2023-03-06 10:44:52",
         },
-     
       ],
+      // 新增数据
+      newData: {
+        code: "",
+        name: "",
+        salary: "",
+        status: "在岗",
+        createTime: "",
+      },
       options: [
         {
           value: "选项1",
@@ -158,17 +174,28 @@ export default {
       value: "",
     };
   },
-  methods:{
-    getPlus(){
-
+  methods: {
+    // 添加
+    getPlus() {
+      this.tableData.push(this.newData);
+      // 获取当前时间的高级方法
+      let time = new Date().getTime();
+      var date = new Date(time + 8 * 3600 * 1000); // 增加8小时
+      this.newData.createTime = date.toJSON().substr(0, 19).replace("T", " ");
     },
-    getModify(){
-
+    // 修改
+    getModify(index) {
+      console.log(this.tableData[index]);
+      this.$set(this.tableData[index],'code',this.newData.code)
+      this.$set(this.tableData[index],'name',this.newData.name)
+      this.$set(this.tableData[index],'salary',this.newData.salary)
+      this.$set(this.tableData[index],'status',this.newData.status)
     },
-    getDelete(){
-      
-    }
-  }
+    // 删除
+    getDelete(index) {
+      this.tableData.splice(index,1)
+    },
+  },
 };
 </script>
 
@@ -194,8 +221,8 @@ export default {
   margin-top: 20px;
   text-align: center;
 }
-.butcolor{
-  background-color: #0099CC;
-  color:#fff;
+.butcolor {
+  background-color: #0099cc;
+  color: #fff;
 }
 </style>
