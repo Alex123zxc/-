@@ -66,6 +66,18 @@ export const constantRoutes = [
       }
     ]
   },
+  {
+    path: '/department',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/department/index'),
+        name:'Department',
+        meta: { title: '部门管理', icon: 'el-icon-office-building' }
+      }
+    ]
+  },
 
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }

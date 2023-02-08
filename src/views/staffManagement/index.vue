@@ -217,6 +217,9 @@ export default {
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
   border-radius: 10px;
 }
+.el-table:hover {
+  box-shadow: 4px 8px 25px rgba(93, 89, 89, 0.45);
+}
 .paging {
   margin-top: 20px;
   text-align: center;
