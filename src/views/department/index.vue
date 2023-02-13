@@ -8,7 +8,7 @@
         class="depart-input"
         prefix-icon="el-icon-search"
         autofocus="true"
-        style="width: 148px"
+        style="width: 145px"
       ></el-input>
       <el-tree
         :data="treeData"
@@ -26,7 +26,7 @@
           style="width: 200px; margin-left: 10px"
         ></el-input>
       </div>
-      <div class="search-item1" >
+      <div class="search-item1">
         手机号码<el-input
           v-model="keyWords"
           placeholder="请输入手机号码"
@@ -34,7 +34,11 @@
         ></el-input>
       </div>
       <div class="search-item1">
-        状态<el-select v-model="value" placeholder="用户状态" style="margin-left: 26px">
+        状态<el-select
+          v-model="value"
+          placeholder="用户状态"
+          style="margin-left: 26px"
+        >
           <el-option
             v-for="item in options"
             :key="item.value"
@@ -56,9 +60,63 @@
         </el-date-picker>
       </div>
       <div class="button-group">
-        <el-button type="primary" prefix-icon="el-icon-s-opportunity">查询</el-button>
-        <el-button >重置</el-button>
-        <el-button type="danger">删除</el-button>
+        <el-button type="primary" icon="el-icon-s-order">查询</el-button>
+        <el-button icon="el-icon-s-release">重置</el-button>
+        <el-button type="success" icon="el-icon-plus">新增</el-button>
+      </div>
+      <el-table
+        ref="multipleTable"
+        :data="tableData"
+        tooltip-effect="dark"
+        style="width: 96%; margin: 0 0 10px 15px"
+        @selection-change=""
+      >
+        <el-table-column type="selection" width="55" align="center">
+        </el-table-column>
+        <el-table-column
+          prop="name"
+          label="账户名称"
+          align="center"
+        ></el-table-column>
+        <el-table-column
+          prop="nickName"
+          label="用户昵称"
+          align="center"
+        ></el-table-column>
+        <el-table-column
+          prop="department"
+          label="部门"
+          align="center"
+          width="100"
+        ></el-table-column>
+        <el-table-column
+          prop="telephone"
+          label="手机号"
+          align="center"
+        ></el-table-column>
+        <el-table-column prop="status" label="状态" align="center">
+          <template slot-scope="scope">
+            <el-tag
+              :type="scope.row.status === '在岗' ? 'success' : 'warning'"
+              disable-transitions
+              >{{ scope.row.status }}</el-tag
+            >
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="createTime"
+          label="创建时间"
+          align="center"
+        ></el-table-column>
+        <el-table-column label="操作" align="center">
+          <template slot-scope="scope">
+            <el-button type="text" size="small" @click="getModify()">修改</el-button>
+            <el-button type="text" size="small" @click="getDelete(scope.$index)">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <div class="block">
+        <el-pagination layout="prev, pager, next" :total="50" style="text-align: center;margin: 20px 20px;"> </el-pagination>
       </div>
     </div>
   </div>
@@ -153,10 +211,111 @@ export default {
         },
       ],
       value: "",
-      value1: '',
-      value2: ''
+      value1: "",
+      value2: "",
+      tableData: [
+        {
+          name: "charGTP",
+          nickName: "小李",
+          department: "深圳总公司研发部门",
+          telephone: "180...",
+          status: "请假",
+          createTime: "2021...",
+        },
+        {
+          name: "scss",
+          nickName: "天天",
+          department: "深圳总公司运维部门",
+          telephone: "137...",
+          status: "在岗",
+          createTime: "2022...",
+        },
+        {
+          name: "nsdd",
+          nickName: "宁次",
+          department: "武汉分公司市场部门",
+          telephone: "135...",
+          status: "在岗",
+          createTime: "2023...",
+        },
+        {
+          name: "Boomer",
+          nickName: "山椒鱼",
+          department: "深圳总公司财务部门",
+          telephone: "130...",
+          status: "在岗",
+          createTime: "2023...",
+        },
+        {
+          name: "Firm",
+          nickName: "扦插",
+          department: "长沙分公司财务部门",
+          telephone: "173...",
+          status: "在岗",
+          createTime: "2023...",
+        },
+        {
+          name: "NOcap",
+          nickName: "花火",
+          department: "长沙分公司研发部门",
+          telephone: "172...",
+          status: "在岗",
+          createTime: "2022...",
+        },
+        {
+          name: "basic",
+          nickName: "鹿丸",
+          department: "深圳总公司测试部门",
+          telephone: "155...",
+          status: "请假",
+          createTime: "2021...",
+        },
+        {
+          name: "Retweet",
+          nickName: "蛤蟆广",
+          department: "深圳总公司市场部门",
+          telephone: "169...",
+          status: "在岗",
+          createTime: "2022...",
+        },
+        {
+          name: "cuteFit",
+          nickName: "井野",
+          department: "武汉分公司市场部门",
+          telephone: "196...",
+          status: "在岗",
+          createTime: "2021...",
+        },
+        {
+          name: "ForReal",
+          nickName: "赤丸",
+          department: "长沙分公司财务部门",
+          telephone: "168...",
+          status: "在岗",
+          createTime: "2020...",
+        },
+        {
+          name: "red",
+          nickName: "雏田",
+          department: "深圳总公司研发部门",
+          telephone: "177...",
+          status: "请假",
+          createTime: "2022...",
+        },
+      ],
+      multipleSelection: [],
     };
   },
+  methods:{
+    // 删除
+    getDelete(index){
+      this.tableData.splice(index,1)
+    },
+    // 修改
+    getModify(){
+
+    }
+  }
 };
 </script>
 
@@ -180,7 +339,7 @@ export default {
 }
 .depart-input {
   font-weight: 700;
-  width: 180px;
+  width: 160px;
   margin: 25px 0 0 10px;
 }
 .el-tree {
@@ -193,6 +352,7 @@ export default {
   background-color: #fff;
   border-radius: 10px;
   border: 1px solid #ccc;
+  box-sizing: border-box;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
   border-color: rgba(0, 0, 0, 0.05);
 }
@@ -211,6 +371,7 @@ export default {
 }
 .button-group {
   float: left;
-  margin: 20px 0 0 40px;
+  margin: 30px 0 30px 96px;
 }
+/* 右侧表格 */
 </style>
