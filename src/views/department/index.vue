@@ -28,7 +28,7 @@
       </div>
       <div class="search-item1">
         手机号码<el-input
-          v-model="keyWords"
+          v-model="telephone"
           placeholder="请输入手机号码"
           style="width: 200px; margin-left: 10px"
         ></el-input>
@@ -60,9 +60,9 @@
         </el-date-picker>
       </div>
       <div class="button-group">
-        <el-button type="primary" icon="el-icon-s-order">查询</el-button>
-        <el-button icon="el-icon-s-release">重置</el-button>
-        <el-button type="success" icon="el-icon-plus">新增</el-button>
+        <el-button type="primary" icon="el-icon-s-order" @click="getFind()">查询</el-button>
+        <el-button icon="el-icon-s-release" @click="getReset()">重置</el-button>
+        <el-button type="success" icon="el-icon-plus" @click="getPlus()">新增</el-button>
       </div>
       <el-table
         ref="multipleTable"
@@ -110,7 +110,7 @@
         ></el-table-column>
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
-            <el-button type="text" size="small" @click="dialogVisible = true"
+            <el-button type="text" size="small" @click="getModify(scope.$index)"
               >修改</el-button
             >
             <el-button type="text" size="small" @click="getDelete(scope.$index)"
@@ -128,64 +128,248 @@
         </el-pagination>
       </div>
     </div>
-    <!-- 遮罩层 -->
+    <!-- 修改遮罩层 -->
     <el-dialog
-      title="提示"
+      title="修改用户"
       :visible.sync="dialogVisible"
-      width="30%"
+      width="55%"
+      top="10vh"
       :before-close="handleClose"
     >
-      <el-form ref="form" :model="form" label-width="200px">
-        <el-form-item label="活动名称">
-          <el-input v-model="form.name"></el-input>
+      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+        <el-form-item
+          label="用户名称"
+          style="display: inline-block"
+          prop="name"
+        >
+          <el-input v-model="form.name" placeholder="请输入用户名称"></el-input>
         </el-form-item>
-        <el-form-item label="活动区域">
-          <el-select v-model="form.region" placeholder="请选择活动区域">
-            <el-option label="区域一" value="shanghai"></el-option>
-            <el-option label="区域二" value="beijing"></el-option>
+
+        <el-form-item
+          label="用户昵称"
+          style="display: inline-block; margin-left: 120px"
+          prop="nickName"
+        >
+          <el-input
+            v-model="form.nickName"
+            placeholder="请输入用户昵称"
+          ></el-input>
+        </el-form-item>
+
+        <el-form-item
+          label="手机号码"
+          style="display: inline-block"
+          prop="telephone"
+        >
+          <el-input
+            v-model="form.telephone"
+            placeholder="请输入手机号码"
+          ></el-input>
+        </el-form-item>
+
+        <el-form-item
+          label="部门名称"
+          style="display: inline-block; margin-left: 104px"
+          prop="department"
+        >
+          <el-select v-model="form.department" placeholder="请选择部门名称">
+            <el-option
+              label="成都总公司研发部门"
+              value="成都总公司研发部门"
+            ></el-option>
+            <el-option
+              label="成都总公司市场部门"
+              value="成都总公司市场部门"
+            ></el-option>
+            <el-option
+              label="成都总公司测试部门"
+              value="成都总公司测试部门"
+            ></el-option>
+            <el-option
+              label="成都总公司财务部门"
+              value="成都总公司财务部门"
+            ></el-option>
+            <el-option
+              label="成都总公司运维部门"
+              value="成都总公司运维部门"
+            ></el-option>
+            <el-option
+              label="武汉分公司市场部门"
+              value="武汉分公司市场部门"
+            ></el-option>
+            <el-option
+              label="武汉分公司财务部门"
+              value="武汉分公司财务部门"
+            ></el-option>
+            <el-option
+              label="长沙分公司研发部门"
+              value="长沙分公司研发部门"
+            ></el-option>
+            <el-option
+              label="长沙分公司市场部门"
+              value="长沙分公司市场部门"
+            ></el-option>
+            <el-option
+              label="长沙分公司财务部门"
+              value="长沙分公司财务部门"
+            ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="活动时间">
-          <el-col :span="11">
-            <el-date-picker
-              type="date"
-              placeholder="选择日期"
-              v-model="form.date1"
-              style="width: 100%"
-            ></el-date-picker>
-          </el-col>
-          <el-col class="line" :span="2">-</el-col>
-          <el-col :span="11">
-            <el-time-picker
-              placeholder="选择时间"
-              v-model="form.date2"
-              style="width: 100%"
-            ></el-time-picker>
-          </el-col>
+
+        <el-form-item label="用户状态" style="display: inline-block">
+          <el-select v-model="form.status" placeholder="请选择状态">
+            <el-option label="在岗" value="在岗"></el-option>
+            <el-option label="请假" value="请假"></el-option>
+          </el-select>
         </el-form-item>
-        <el-form-item label="即时配送">
-          <el-switch v-model="form.delivery"></el-switch>
+
+        <el-form-item
+          label="性别"
+          style="display: inline-block; margin-left: 88px"
+        >
+          <el-select v-model="form.sex" placeholder="请选择性别">
+            <el-option label="男性" value="男性"></el-option>
+            <el-option label="女性" value="女性"></el-option>
+            <el-option label="保密" value="保密"></el-option>
+          </el-select>
         </el-form-item>
-        <el-form-item label="活动性质">
-          <el-checkbox-group v-model="form.type">
-            <el-checkbox label="美食/餐厅线上活动" name="type"></el-checkbox>
-            <el-checkbox label="地推活动" name="type"></el-checkbox>
-            <el-checkbox label="线下主题活动" name="type"></el-checkbox>
-            <el-checkbox label="单纯品牌曝光" name="type"></el-checkbox>
-          </el-checkbox-group>
-        </el-form-item>
-        <el-form-item label="特殊资源">
-          <el-radio-group v-model="form.resource">
-            <el-radio label="线上品牌商赞助"></el-radio>
-            <el-radio label="线下场地免费"></el-radio>
+
+        <el-form-item label="用户类型" style="display: inline-block">
+          <el-radio-group v-model="form.type">
+            <el-radio label="后台用户"></el-radio>
+            <el-radio label="后台管理员"></el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="活动形式">
-          <el-input type="textarea" v-model="form.desc"></el-input>
+
+        <el-form-item label="用户描述">
+          <el-input type="textarea" v-model="form.textarea"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="onSubmit">立即创建</el-button>
-          <el-button>取消</el-button>
+          <el-button type="primary" @click="getSummit()">立即修改</el-button>
+          <el-button @click="getClose()">取消</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
+    <!-- 新增遮罩层 -->
+    <el-dialog
+      title="新增用户"
+      :visible.sync="dialogVisible2"
+      width="55%"
+      top="10vh"
+      :before-close="handleClose"
+    >
+      <el-form ref="newForm" :model="newForm" :rules="rules" label-width="80px">
+        <el-form-item
+          label="用户名称"
+          style="display: inline-block"
+          prop="name"
+        >
+          <el-input v-model="newForm.name" placeholder="请输入用户名称"></el-input>
+        </el-form-item>
+
+        <el-form-item
+          label="用户昵称"
+          style="display: inline-block; margin-left: 120px"
+          prop="nickName"
+        >
+          <el-input
+            v-model="newForm.nickName"
+            placeholder="请输入用户昵称"
+          ></el-input>
+        </el-form-item>
+
+        <el-form-item
+          label="手机号码"
+          style="display: inline-block"
+          prop="telephone"
+        >
+          <el-input
+            v-model="newForm.telephone"
+            placeholder="请输入手机号码"
+          ></el-input>
+        </el-form-item>
+
+        <el-form-item
+          label="部门名称"
+          style="display: inline-block; margin-left: 104px"
+          prop="department"
+        >
+          <el-select v-model="newForm.department" placeholder="请选择部门名称">
+            <el-option
+              label="成都总公司研发部门"
+              value="成都总公司研发部门"
+            ></el-option>
+            <el-option
+              label="成都总公司市场部门"
+              value="成都总公司市场部门"
+            ></el-option>
+            <el-option
+              label="成都总公司测试部门"
+              value="成都总公司测试部门"
+            ></el-option>
+            <el-option
+              label="成都总公司财务部门"
+              value="成都总公司财务部门"
+            ></el-option>
+            <el-option
+              label="成都总公司运维部门"
+              value="成都总公司运维部门"
+            ></el-option>
+            <el-option
+              label="武汉分公司市场部门"
+              value="武汉分公司市场部门"
+            ></el-option>
+            <el-option
+              label="武汉分公司财务部门"
+              value="武汉分公司财务部门"
+            ></el-option>
+            <el-option
+              label="长沙分公司研发部门"
+              value="长沙分公司研发部门"
+            ></el-option>
+            <el-option
+              label="长沙分公司市场部门"
+              value="长沙分公司市场部门"
+            ></el-option>
+            <el-option
+              label="长沙分公司财务部门"
+              value="长沙分公司财务部门"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="用户状态" style="display: inline-block">
+          <el-select v-model="newForm.status" placeholder="请选择状态">
+            <el-option label="在岗" value="在岗"></el-option>
+            <el-option label="请假" value="请假"></el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item
+          label="创建时间"
+          style="display: inline-block; margin-left: 88px"
+        >
+          <el-select v-model="newForm.createTime" placeholder="请选择创建时间">
+            <el-option label="2020..." value="2020..."></el-option>
+            <el-option label="2021..." value="2021..."></el-option>
+            <el-option label="2022..." value="2022..."></el-option>
+            <el-option label="2023..." value="2023..."></el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="用户类型" style="display: inline-block">
+          <el-radio-group v-model="newForm.type">
+            <el-radio label="后台用户"></el-radio>
+            <el-radio label="后台管理员"></el-radio>
+          </el-radio-group>
+        </el-form-item>
+
+        <el-form-item label="用户描述">
+          <el-input type="textarea" v-model="newForm.textarea"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="getSummit2()">立即创建</el-button>
+          <el-button @click="getClose2()">取消</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -269,23 +453,25 @@ export default {
         label: "label",
       },
       // 右侧数据
-      keyWords: "",
       options: [
         {
           value: "选项1",
-          label: "启用",
+          label: "请假",
         },
         {
           value: "选项2",
-          label: "禁用",
+          label: "在岗",
         },
       ],
+      keyWords: "",
+      telephone:"",
       value: "",
       value1: "",
+
       value2: "",
       tableData: [
         {
-          name: "charGTP",
+          name: "chatGTP",
           nickName: "小李",
           department: "深圳总公司研发部门",
           telephone: "180...",
@@ -376,16 +562,77 @@ export default {
       multipleSelection: [],
       // 遮罩层
       dialogVisible: false,
+      dialogVisible2: false,
       form: {
         name: "",
-        region: "",
-        date1: "",
-        date2: "",
-        delivery: false,
-        type: [],
-        resource: "",
-        desc: "",
+        nickName: "",
+        telephone: "",
+        department: "",
+        sex: "",
+        status: "",
+        type: "",
+        textarea: "",
       },
+      rules: {
+        name: [
+          { required: true, message: "请输入用户名称", trigger: "blur" },
+          { min: 2, max: 6, message: "长度在 2 到 6个字符", trigger: "blur" },
+        ],
+        nickName: [
+          { required: true, message: "请输入用户昵称", trigger: "blur" },
+          { min: 2, max: 8, message: "长度在 2 到 8个字符", trigger: "blur" },
+        ],
+        telephone: [
+          { required: true, message: "电话号码不能为空" },
+          { type: "number", message: "电话号码必须为数字值" },
+        ],
+        department: [
+          { required: true, message: "请选择部门名称", trigger: "change" },
+        ],
+        date1: [
+          {
+            type: "date",
+            required: true,
+            message: "请选择日期",
+            trigger: "change",
+          },
+        ],
+        date2: [
+          {
+            type: "date",
+            required: true,
+            message: "请选择时间",
+            trigger: "change",
+          },
+        ],
+        type: [
+          {
+            type: "array",
+            required: true,
+            message: "请至少选择一个活动性质",
+            trigger: "change",
+          },
+        ],
+        resource: [
+          { required: true, message: "请选择活动资源", trigger: "change" },
+        ],
+        desc: [{ required: true, message: "请填写活动形式", trigger: "blur" }],
+      },
+      newForm: {
+        name: "",
+        nickName: "",
+        telephone: "",
+        department: "",
+        createTime: "",
+        status: "",
+        type: "",
+        textarea: "",
+      },
+      tableIndex: "",
+      // 筛选后的数据
+      newit:"",
+      // 保存的第二份
+      tableData2:''
     };
   },
   methods: {
@@ -393,22 +640,61 @@ export default {
     getDelete(index) {
       this.tableData.splice(index, 1);
     },
-    // 点击弹出表单
+    // 修改
+    getModify(index) {
+      this.dialogVisible = true;
+      this.tableIndex = index;
+    },
+    // 新增
+    getPlus(){
+      this.dialogVisible2 = true;
+    },
+    // 点击x关闭表单
     handleClose(done) {
-      this.$confirm("确认关闭？")
-        .then((_) => {
-          done();
-        })
-        .catch((_) => {});
+      done();
     },
-    onSubmit() {
-      console.log("submit!");
+    // 点击取消关闭遮罩层
+    getClose() {
+      this.dialogVisible = false;
     },
+    getClose2() {
+      this.dialogVisible2 = false;
+    },
+    // 点击提交按钮将收集到的信息赋给对应的修改
+    getSummit() {
+      this.dialogVisible = false;
+      this.tableData[this.tableIndex].name=this.form.name
+      this.tableData[this.tableIndex].nickName=this.form.nickName
+      this.tableData[this.tableIndex].department=this.form.department
+      this.tableData[this.tableIndex].telephone=this.form.telephone
+      this.tableData[this.tableIndex].status=this.form.status
+    },
+    getSummit2() {
+      this.dialogVisible2 = false;
+      this.tableData.push(this.newForm);
+    },
+    // 设置筛选
+    getFind(){
+       this.newit= this.tableData.filter((item)=>{
+        return item.name===this.keyWords || item.nickName===this.keyWords
+      })
+      this.tableData2=this.tableData.slice()
+      this.tableData.splice(0,11)
+      this.tableData.push(this.newit[0])
+    },
+    // 清除筛选信息
+    getReset(){
+      this.tableData.splice(0,1)
+      this.tableData.push(this.tableData2[0],this.tableData2[1],this.tableData2[2],this.tableData2[3],this.tableData2[4],this.tableData2[5],this.tableData2[6],this.tableData2[7],this.tableData2[8],this.tableData2[9],this.tableData2[10])
+    }
   },
+  watch:{
+
+  }
 };
 </script>
 
-<style scoped>
+<style>
 .depart {
   display: flex;
 }
@@ -463,4 +749,8 @@ export default {
   margin: 30px 0 30px 96px;
 }
 /* 右侧表格 */
+.el-dialog__title {
+  font-size: 25px !important;
+  color: rgb(80, 149, 240);
+}
 </style>
