@@ -45,7 +45,7 @@
       
       
       <div class="tips">
-        <span style="margin-right:20px;">用户: admin</span>
+        <span style="margin-right:20px;">用户: admin或editor</span>
         <span> 密码: 123456</span>
       </div>
 
