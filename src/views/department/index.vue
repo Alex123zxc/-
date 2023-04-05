@@ -60,9 +60,13 @@
         </el-date-picker>
       </div>
       <div class="button-group">
-        <el-button type="primary" icon="el-icon-s-order" @click="getFind()">查询</el-button>
+        <el-button type="primary" icon="el-icon-s-order" @click="getFind()"
+          >查询</el-button
+        >
         <el-button icon="el-icon-s-release" @click="getReset()">重置</el-button>
-        <el-button type="success" icon="el-icon-plus" @click="getPlus()">新增</el-button>
+        <el-button type="success" icon="el-icon-plus" @click="getPlus()"
+          >新增</el-button
+        >
       </div>
       <el-table
         ref="multipleTable"
@@ -264,7 +268,10 @@
           style="display: inline-block"
           prop="name"
         >
-          <el-input v-model="newForm.name" placeholder="请输入用户名称"></el-input>
+          <el-input
+            v-model="newForm.name"
+            placeholder="请输入用户名称"
+          ></el-input>
         </el-form-item>
 
         <el-form-item
@@ -464,14 +471,14 @@ export default {
         },
       ],
       keyWords: "",
-      telephone:"",
+      telephone: "",
       value: "",
       value1: "",
 
       value2: "",
       tableData: [
         {
-          name: "chatGTP",
+          name: "chatGPT",
           nickName: "小李",
           department: "深圳总公司研发部门",
           telephone: "180...",
@@ -563,6 +570,7 @@ export default {
       // 遮罩层
       dialogVisible: false,
       dialogVisible2: false,
+      dialogVisible3: false,
       form: {
         name: "",
         nickName: "",
@@ -630,9 +638,9 @@ export default {
       },
       tableIndex: "",
       // 筛选后的数据
-      newit:"",
+      newit: "",
       // 保存的第二份
-      tableData2:''
+      tableData2: "",
     };
   },
   methods: {
@@ -646,7 +654,7 @@ export default {
       this.tableIndex = index;
     },
     // 新增
-    getPlus(){
+    getPlus() {
       this.dialogVisible2 = true;
     },
     // 点击x关闭表单
@@ -662,35 +670,45 @@ export default {
     },
     // 点击提交按钮将收集到的信息赋给对应的修改
     getSummit() {
-      this.dialogVisible = false;
-      this.tableData[this.tableIndex].name=this.form.name
-      this.tableData[this.tableIndex].nickName=this.form.nickName
-      this.tableData[this.tableIndex].department=this.form.department
-      this.tableData[this.tableIndex].telephone=this.form.telephone
-      this.tableData[this.tableIndex].status=this.form.status
+        this.dialogVisible = false;
+        this.tableData[this.tableIndex].name = this.form.name;
+        this.tableData[this.tableIndex].nickName = this.form.nickName;
+        this.tableData[this.tableIndex].department = this.form.department;
+        this.tableData[this.tableIndex].telephone = this.form.telephone;
+        this.tableData[this.tableIndex].status = this.form.status;
+      
     },
     getSummit2() {
       this.dialogVisible2 = false;
       this.tableData.push(this.newForm);
     },
     // 设置筛选
-    getFind(){
-       this.newit= this.tableData.filter((item)=>{
-        return item.name===this.keyWords || item.nickName===this.keyWords
-      })
-      this.tableData2=this.tableData.slice()
-      this.tableData.splice(0,11)
-      this.tableData.push(this.newit[0])
+    getFind() {
+      this.newit = this.tableData.filter((item) => {
+        return item.name === this.keyWords || item.nickName === this.keyWords;
+      });
+      this.tableData2 = this.tableData.slice();
+      this.tableData.splice(0, 11);
+      this.tableData.push(this.newit[0]);
     },
     // 清除筛选信息
-    getReset(){
-      this.tableData.splice(0,1)
-      this.tableData.push(this.tableData2[0],this.tableData2[1],this.tableData2[2],this.tableData2[3],this.tableData2[4],this.tableData2[5],this.tableData2[6],this.tableData2[7],this.tableData2[8],this.tableData2[9],this.tableData2[10])
-    }
+    getReset() {
+      this.tableData.splice(0, 1);
+      this.tableData.push(
+        this.tableData2[0],
+        this.tableData2[1],
+        this.tableData2[2],
+        this.tableData2[3],
+        this.tableData2[4],
+        this.tableData2[5],
+        this.tableData2[6],
+        this.tableData2[7],
+        this.tableData2[8],
+        this.tableData2[9],
+        this.tableData2[10]
+      );
+    },
   },
-  watch:{
-
-  }
 };
 </script>
 

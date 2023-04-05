@@ -21,7 +21,7 @@ export default {
         left:100,
         top:30,
         textStyle:{
-          color:"#0099CC",
+          color:"#f0b69d",
         },
       },
       legend: {

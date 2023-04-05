@@ -9,6 +9,13 @@
     <el-table-column label="价格" width="195" align="center" prop="Price">
     </el-table-column>
     <el-table-column label="状态" width="100" align="center" prop="Status">
+      <template slot-scope="scope">
+          <el-tag
+            :type="scope.row.Status === 'success' ? 'pending' : 'success'"
+            disable-transitions
+            >{{ scope.row.Status }}</el-tag
+          >
+        </template>
     </el-table-column>
   </el-table>
 </template>

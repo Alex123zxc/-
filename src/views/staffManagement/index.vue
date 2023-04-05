@@ -19,7 +19,12 @@
         v-model="newData.salary"
         placeholder="请输入岗位薪水"
       ></el-input>
-      状态<el-select size="small" class="staffItem" placeholder="请选择" v-model="options.label">
+      状态<el-select
+        size="small"
+        class="staffItem"
+        placeholder="请选择"
+        v-model="options.label"
+      >
         <el-option
           v-for="item in options"
           :key="item.value"
@@ -63,7 +68,10 @@
       </el-table-column>
       <el-table-column label="操作" align="center">
         <template slot-scope="scope">
-          <el-button size="mini" class="butcolor" @click="getModify(scope.$index)"
+          <el-button
+            size="mini"
+            class="butcolor"
+            @click="getModify(scope.$index)"
             >修改</el-button
           >
           <el-button size="mini" type="danger" @click="getDelete(scope.$index)"
@@ -79,7 +87,21 @@
       :total="100"
     >
     </el-pagination>
+    <!-- 弹出框 -->
+  <el-dialog
+    title="提示"
+    :visible.sync="dialogVisible"
+    width="30%"
+    :before-close="handleClose"
+  >
+    <span>请输入完整信息</span>
+    <span slot="footer" class="dialog-footer">
+      <el-button @click="dialogVisible = false">取 消</el-button>
+      <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+    </span>
+  </el-dialog>
   </div>
+  
 </template>
 
 <script>
@@ -172,28 +194,34 @@ export default {
         },
       ],
       value: "",
+      dialogVisible: false,
     };
   },
   methods: {
     // 添加
     getPlus() {
-      this.tableData.push(this.newData);
-      // 获取当前时间的高级方法
-      let time = new Date().getTime();
-      var date = new Date(time + 8 * 3600 * 1000); // 增加8小时
-      this.newData.createTime = date.toJSON().substr(0, 19).replace("T", " ");
+      if(this.newData.name==""||this.newData.code==""||this.newData.salary==""){
+        this.dialogVisible=true
+      } else {
+        this.tableData.push(this.newData);
+        // 获取当前时间的高级方法
+        let time = new Date().getTime();
+        var date = new Date(time + 8 * 3600 * 1000); // 增加8小时
+        this.newData.createTime = date.toJSON().substr(0, 19).replace("T", " ");
+      }
+      
     },
     // 修改
     getModify(index) {
       console.log(this.tableData[index]);
-      this.$set(this.tableData[index],'code',this.newData.code)
-      this.$set(this.tableData[index],'name',this.newData.name)
-      this.$set(this.tableData[index],'salary',this.newData.salary)
-      this.$set(this.tableData[index],'status',this.newData.status)
+      this.$set(this.tableData[index], "code", this.newData.code);
+      this.$set(this.tableData[index], "name", this.newData.name);
+      this.$set(this.tableData[index], "salary", this.newData.salary);
+      this.$set(this.tableData[index], "status", this.newData.status);
     },
     // 删除
     getDelete(index) {
-      this.tableData.splice(index,1)
+      this.tableData.splice(index, 1);
     },
   },
 };
