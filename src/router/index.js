@@ -67,6 +67,18 @@ export const constantRoutes = [
     ]
   },
   {
+    path: '/finance',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/finance/index'),
+        name:'Finance',
+        meta: { title: '财务管理', icon: 'el-icon-document-copy' }
+      }
+    ]
+  },
+  {
     path: '/department',
     component: Layout,
     children: [
